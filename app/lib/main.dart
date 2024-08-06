@@ -74,20 +74,24 @@ class _MyHomePageState extends State<MyHomePage> {
             .inversePrimary,
         title: Text(widget.title),
       ),
-      body: FutureBuilder<void>(
-          future: _initializeControllerFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return CameraPreview(_controller);
-            } else {
-              return const Center(child: CircularProgressIndicator());
-            }
-          }
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      body: Column(
+        children: [
+          FutureBuilder<void>(
+              future: _initializeControllerFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return CameraPreview(_controller);
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              }
+          ),
+          OverflowBar(
+            children: [
+              TextButton( child: const Icon(Icons.camera, size: 50), onPressed: () {}),
+            ]
+          )
+        ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }

@@ -48,7 +48,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
-  int _counter = 0;
 
   @override
   void initState() {
@@ -56,12 +55,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
     _controller = CameraController(widget.camera, ResolutionPreset.medium);
     _initializeControllerFuture = _controller.initialize();
-  }
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
   }
 
   @override
@@ -88,7 +81,9 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           OverflowBar(
             children: [
-              TextButton( child: const Icon(Icons.camera, size: 50), onPressed: () {}),
+              TextButton( child: const Icon(Icons.camera, size: 50), onPressed: () async {
+                final image = await _controller.takePicture();
+              }),
             ]
           )
         ],

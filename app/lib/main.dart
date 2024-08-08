@@ -1,3 +1,4 @@
+import 'package:app/ImageView.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
@@ -80,11 +81,16 @@ class _MyHomePageState extends State<MyHomePage> {
               }
           ),
           OverflowBar(
-            children: [
-              TextButton( child: const Icon(Icons.camera, size: 50), onPressed: () async {
-                final image = await _controller.takePicture();
-              }),
-            ]
+              children: [
+                TextButton(child: const Icon(Icons.camera, size: 50),
+                    onPressed: () async {
+                      final image = await _controller.takePicture();
+                      await Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => ImageView(image: image))
+                      );
+                    }),
+              ]
           )
         ],
       ), // This trailing comma makes auto-formatting nicer for build methods.

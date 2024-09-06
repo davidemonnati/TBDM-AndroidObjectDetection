@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app/response_view.dart';
 import 'package:app/service/client_service.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +18,13 @@ class ImageView extends StatelessWidget {
           children: [
             Image.file(File(image.path)),
             ElevatedButton(child: const Text("Send"), onPressed: () {
-              makeHttpRequest(File(image.path));
-            })
+              Future<ImageProvider> imageWithDetections = uploadImage(
+                  File(image.path));
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) =>
+                      ResponseView(image: imageWithDetections))
+              );
+            }),
           ],
         )
     );

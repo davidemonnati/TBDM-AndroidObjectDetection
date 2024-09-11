@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ResponseView extends StatelessWidget {
-  final Future<ImageProvider> image;
+  final ImageProvider image;
 
   const ResponseView({super.key, required this.image});
 
@@ -11,13 +11,14 @@ class ResponseView extends StatelessWidget {
         appBar: AppBar(title: const Text("Display image")),
         body: Column(
           children: [
-            FutureBuilder(
+            Image(image: image)
+/*            FutureBuilder(
                 future: image,
                 builder: (BuildContext context,
                     AsyncSnapshot<ImageProvider> snapshot) {
                   return Image(image: snapshot.requireData);
                 }
-            )
+            )*/
           ],
         )
     );

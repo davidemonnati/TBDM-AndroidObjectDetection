@@ -24,10 +24,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+        scaffoldBackgroundColor: const Color(0x00080808),
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: MyHomePage(camera: camera, title: 'Flutter Demo Home Page'),
+      home: MyHomePage(camera: camera),
     );
   }
 }
@@ -36,10 +37,8 @@ class MyHomePage extends StatefulWidget {
   const MyHomePage({
     super.key,
     required this.camera,
-    required this.title
   });
 
-  final String title;
   final CameraDescription camera;
 
   @override
@@ -61,36 +60,77 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme
-            .of(context)
-            .colorScheme
-            .inversePrimary,
-        title: Text(widget.title),
-      ),
       body: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          FutureBuilder<void>(
-              future: _initializeControllerFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return CameraPreview(_controller);
-                } else {
-                  return const Center(child: CircularProgressIndicator());
-                }
-              }
+          Container(
+            padding: MediaQuery
+                .of(context)
+                .padding * 1.2,
           ),
-          OverflowBar(
+          Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                TextButton(child: const Icon(Icons.camera, size: 50),
-                    onPressed: () async {
-                      final image = await _controller.takePicture();
-                      await Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) => ImageView(image: image))
-                      );
-                    }),
+                TextButton(
+                    onPressed: () {},
+                    child: Icon(
+                        Icons.cached,
+                        color: Colors.white,
+                        size: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 0.07
+                    )
+                ),
               ]
+          ),
+          Container(
+            height: MediaQuery
+                .of(context)
+                .size
+                .height * 0.7,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
+            child: FutureBuilder<void>(
+                future: _initializeControllerFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return CameraPreview(_controller);
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                }
+            ),
+          ),
+          SizedBox(
+            height: MediaQuery
+                .of(context)
+                .size
+                .height * 0.03,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
+          ),
+          PreferredSize(
+            preferredSize: const Size.fromHeight(10),
+            child: TextButton(
+                child: const Icon(
+                  Icons.radio_button_checked,
+                  size: 80,
+                  color: Colors.white,
+                ),
+                onPressed: () async {
+                  final image = await _controller.takePicture();
+                  await Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => ImageView(image: image))
+                  );
+                }
+            ),
           )
         ],
       ), // This trailing comma makes auto-formatting nicer for build methods.

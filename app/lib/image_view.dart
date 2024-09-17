@@ -67,11 +67,13 @@ class _ImageViewState extends State<ImageView> {
                   //     .height * 0.2,),
                   Expanded(
                     child: _buildButtons(
-                        Colors.white, Icons.delete, 'Cancel', deleteImage),
+                        Colors.white, Icons.delete_outline, 'Cancel',
+                        deleteImage),
                   ),
                   Expanded(
                       child: _buildButtons(
-                          Colors.white, Icons.send, 'Elaborate', elaborateImage)
+                          Colors.white, Icons.send_outlined, 'Elaborate',
+                          elaborateImage)
                   )
                 ],
               )
@@ -81,12 +83,12 @@ class _ImageViewState extends State<ImageView> {
   }
 
   Column _buildButtons(Color color, IconData icon, String label,
-      Function() funzione) {
+      Function() function) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        TextButton(onPressed: () => funzione(),
+        TextButton(onPressed: () => function(),
             child: Icon(icon, color: color, size: 40)),
         //Icon(icon, color: color, size: 40),
         Container(

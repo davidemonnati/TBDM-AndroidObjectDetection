@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 
-var uri = "http://192.168.1.132:8000/";
+var uri = "http://192.168.1.32:8000/";
 
 Future<ImageProvider> uploadImage(File image) {
   Future<StreamedResponse> response = makeHttpRequest(image);

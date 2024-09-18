@@ -27,23 +27,14 @@ class _ImageViewState extends State<ImageView> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Stack(
-            children: [
-              Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: MediaQuery
+          children: [
+            Stack(
+                children: [
+                  Positioned(
+                      top: MediaQuery
                           .of(context)
                           .size
-                          .height * 0.1,
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width,
-                      //alignment: Alignment.topLeft,
-                      padding: MediaQuery
-                          .of(context)
-                          .padding * 1.2,
+                          .width * 0.2,
                       child: RichText(
                           text: const TextSpan(
                               text: 'New image',
@@ -52,63 +43,87 @@ class _ImageViewState extends State<ImageView> {
                                 fontFamily: 'cabin',
                               )
                           )
-                      ),
-                    ),
-                    Container(
-                      padding: MediaQuery
-                          .of(context)
-                          .padding * 0.5,
+                      )
+                  ),
+                  Positioned(
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .height,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width,
+                    child: FractionallySizedBox(
+                      widthFactor: 1,
+                      heightFactor: 0.7,
                       child: Image.file(File(image.path)),
                     ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _buildButtons(
-                              Colors.white, Icons.delete_outline, 'Cancel',
-                              deleteImage),
-                        ),
-                        Expanded(
+                  ),
+                  Positioned(
+                      top: MediaQuery
+                          .of(context)
+                          .size
+                          .width * 0.9,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width,
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .height,
+                      child: Row(
+                        children: [
+                          Expanded(
                             child: _buildButtons(
-                                Colors.white, Icons.send_outlined,
-                                'Elaborate',
-                                elaborateImage)
-                        ),
-                      ],
-                    )
-                  ]
-              ),
-              //Visibility(child: Align(alignment: Alignment.center, child: CircularProgressIndicator())),
-              Visibility(
-                  visible: loading,
-                  child: Positioned(
-                    child: Align(
-                        alignment: Alignment.center,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const SizedBox(
-                              height: 50,
-                              width: 50,
-                              child: CircularProgressIndicator(strokeWidth: 5,),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(top: 5),
-                              child: const Text(
-                                "Processing",
-                                style: TextStyle(
-                                  fontSize: 27,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white,
-                                ),
+                                Colors.white, Icons.delete_outline, 'Cancel',
+                                deleteImage),
+                          ),
+                          Expanded(
+                              child: _buildButtons(
+                                  Colors.white, Icons.send_outlined,
+                                  'Elaborate',
+                                  elaborateImage)
+                          ),
+                        ],
+                      )
+                  ),
+                ]
+            ),
+            Visibility(
+                visible: loading,
+                child: Positioned(
+                  child: Align(
+                      alignment: Alignment.center,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(
+                            height: 50,
+                            width: 50,
+                            child: CircularProgressIndicator(strokeWidth: 5),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 5),
+                            child: const Text(
+                              "Processing",
+                              style: TextStyle(
+                                fontSize: 27,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
                               ),
-                            )
-                          ],
-                        )
-                    ),
-                  )
-              )
-            ])
+                            ),
+                          )
+                        ],
+                      )
+                  ),
+                )
+            ),
+          ],
+        )
+
     );
   }
 
@@ -162,4 +177,3 @@ class _ImageViewState extends State<ImageView> {
     Navigator.of(context).pop();
   }
 }
-

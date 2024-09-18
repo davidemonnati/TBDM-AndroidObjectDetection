@@ -119,6 +119,6 @@ class _ResponseViewState extends State<ResponseView> {
   }
 
   void deleteImage() {
-    Navigator.of(context).pop();
+    Navigator.pushNamed(context, '/home');
   }
 }

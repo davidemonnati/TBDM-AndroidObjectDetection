@@ -1,25 +1,25 @@
 import 'dart:io';
-
-import 'package:app/response_view.dart';
-import 'package:app/service/client_service.dart';
+import 'package:app/view/image_preview/image_preview_presenter.dart';
+import 'package:app/view/response_image/response_image_view.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
-class ImageView extends StatefulWidget {
-  const ImageView({super.key, required this.image});
-  final XFile image;
+class ImagePreviewView extends StatefulWidget {
+  const ImagePreviewView({super.key, required XFile image}) : _image = image;
+  final XFile _image;
 
-  State<ImageView> createState() => _ImageViewState(image: image);
+  State<ImagePreviewView> createState() => _ImagePreviewViewState(image: _image);
 }
 
-class _ImageViewState extends State<ImageView> {
-  _ImageViewState({required this.image});
+class _ImagePreviewViewState extends State<ImagePreviewView> {
+  _ImagePreviewViewState({required XFile image}) : _image = image;
 
-  final XFile image;
-  static bool loading = false;
+  final XFile _image;
+  static bool _loading = false;
+  ImagePreviewPresenter _presenter = ImagePreviewPresenter();
 
   @override void initState() {
-    loading = false;
+    _loading = false;
     super.initState();
   }
 
@@ -57,7 +57,7 @@ class _ImageViewState extends State<ImageView> {
                     child: FractionallySizedBox(
                       widthFactor: 1,
                       heightFactor: 0.7,
-                      child: Image.file(File(image.path)),
+                      child: Image.file(File(_image.path)),
                     ),
                   ),
                   Positioned(
@@ -78,13 +78,13 @@ class _ImageViewState extends State<ImageView> {
                           Expanded(
                             child: _buildButtons(
                                 Colors.white, Icons.delete_outline, 'Cancel',
-                                deleteImage),
+                                _deleteImage),
                           ),
                           Expanded(
                               child: _buildButtons(
                                   Colors.white, Icons.send_outlined,
                                   'Elaborate',
-                                  elaborateImage)
+                                  _elaborateImage)
                           ),
                         ],
                       )
@@ -92,7 +92,7 @@ class _ImageViewState extends State<ImageView> {
                 ]
             ),
             Visibility(
-                visible: loading,
+                visible: _loading,
                 child: Positioned(
                   child: Align(
                       alignment: Alignment.center,
@@ -150,17 +150,17 @@ class _ImageViewState extends State<ImageView> {
     );
   }
 
-  void elaborateImage() {
-    setState(() => loading = true);
-    uploadImage(File(image.path)).then((image) {
+  void _elaborateImage() {
+    setState(() => _loading = true);
+    _presenter.uploadImage(_image).then((image) {
       Navigator.of(context).push(
           MaterialPageRoute(
               builder: (context) =>
-                  ResponseView(image: image))
+                  ResponseImageView(image: image))
       );
-      setState(() => loading = false);
+      setState(() => _loading = false);
     }).onError((e, s) {
-      setState(() => loading = false);
+      setState(() => _loading = false);
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
               content: const Text(
@@ -173,7 +173,7 @@ class _ImageViewState extends State<ImageView> {
     });
   }
 
-  void deleteImage() {
+  void _deleteImage() {
     Navigator.of(context).pop();
   }
 }

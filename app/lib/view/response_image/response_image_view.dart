@@ -2,17 +2,18 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-class ResponseView extends StatefulWidget {
-  const ResponseView({super.key, required this.image});
-  final ImageProvider image;
+class ResponseImageView extends StatefulWidget {
+  const ResponseImageView({super.key, required ImageProvider<Object> image}) : _image = image;
+  final ImageProvider _image;
 
-  State<ResponseView> createState() => _ResponseViewState(image: image);
+  State<ResponseImageView> createState() => _ResponseImageViewState(image: _image);
 }
 
-class _ResponseViewState extends State<ResponseView> {
-  final ImageProvider image;
+class _ResponseImageViewState extends State<ResponseImageView> {
+  final ImageProvider _image;
 
-  _ResponseViewState({required this.image});
+  _ResponseImageViewState({required ImageProvider<Object> image})
+      : _image = image;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +54,7 @@ class _ResponseViewState extends State<ResponseView> {
                   panEnabled: true,
                   boundaryMargin: const EdgeInsets.all(100),
                   maxScale: 3,
-                  child: Image(image: image),
+                  child: Image(image: _image),
                 ),
               ),
             ),
@@ -75,12 +76,12 @@ class _ResponseViewState extends State<ResponseView> {
                     Expanded(
                         child: _buildButtons(
                             Colors.white, Icons.delete_outlined, 'Delete',
-                            deleteImage)
+                            _deleteImage)
                     ),
                     Expanded(
                         child: _buildButtons(
                             Colors.white, Icons.archive_outlined, 'Save',
-                            saveImage)
+                            _saveImage)
                     ),
                   ],
                 )
@@ -98,7 +99,6 @@ class _ResponseViewState extends State<ResponseView> {
       children: [
         TextButton(onPressed: () => function(),
             child: Icon(icon, color: color, size: 40)),
-        //Icon(icon, color: color, size: 40),
         Container(
           margin: const EdgeInsets.only(top: 2),
           child: Text(
@@ -114,11 +114,11 @@ class _ResponseViewState extends State<ResponseView> {
     );
   }
 
-  void saveImage() {
+  void _saveImage() {
     // TODO: inserire logica per il salvataggio della foto a BE
   }
 
-  void deleteImage() {
+  void _deleteImage() {
     Navigator.pushNamed(context, '/home');
   }
 }

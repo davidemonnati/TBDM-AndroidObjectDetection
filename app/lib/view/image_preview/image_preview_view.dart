@@ -16,7 +16,7 @@ class _ImagePreviewViewState extends State<ImagePreviewView> {
 
   final XFile _image;
   static bool _loading = false;
-  ImagePreviewPresenter _presenter = ImagePreviewPresenter();
+  final ImagePreviewPresenter _presenter = ImagePreviewPresenter();
 
   @override void initState() {
     _loading = false;
@@ -123,7 +123,6 @@ class _ImagePreviewViewState extends State<ImagePreviewView> {
             ),
           ],
         )
-
     );
   }
 
@@ -152,11 +151,12 @@ class _ImagePreviewViewState extends State<ImagePreviewView> {
 
   void _elaborateImage() {
     setState(() => _loading = true);
-    _presenter.uploadImage(_image).then((image) {
+    _presenter.uploadImage(_image).then((result) async {
+      ImageProvider imageProvider = await _presenter.getElaboratedImage(result);
       Navigator.of(context).push(
-          MaterialPageRoute(
-              builder: (context) =>
-                  ResponseImageView(image: image))
+          MaterialPageRoute(builder: (context) =>
+              ResponseImageView(result: result, image: imageProvider)
+          )
       );
       setState(() => _loading = false);
     }).onError((e, s) {

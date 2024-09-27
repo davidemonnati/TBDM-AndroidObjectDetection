@@ -1,3 +1,3 @@
 class Constants {
-  static const uri = "http://192.168.1.32:8000/";
+  static const uri = "http://192.168.1.3:8000/";
 }

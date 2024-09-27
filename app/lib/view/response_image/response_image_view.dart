@@ -1,19 +1,27 @@
 import 'dart:math';
 
+import 'package:app/entity/result.dart';
 import 'package:flutter/material.dart';
 
 class ResponseImageView extends StatefulWidget {
-  const ResponseImageView({super.key, required ImageProvider<Object> image}) : _image = image;
-  final ImageProvider _image;
+  const ResponseImageView({super.key, required Result result, required ImageProvider image}) :
+        _image = image,
+        _result = result;
 
-  State<ResponseImageView> createState() => _ResponseImageViewState(image: _image);
+  final ImageProvider _image;
+  final Result _result;
+
+  State<ResponseImageView> createState() => _ResponseImageViewState(image: _image, result: _result);
 }
 
 class _ResponseImageViewState extends State<ResponseImageView> {
   final ImageProvider _image;
+  final Result _result;
 
-  _ResponseImageViewState({required ImageProvider<Object> image})
-      : _image = image;
+  _ResponseImageViewState(
+      {required ImageProvider<Object> image, required Result result})
+      : _image = image,
+        _result = result;
 
   @override
   Widget build(BuildContext context) {

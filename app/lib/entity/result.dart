@@ -13,4 +13,10 @@ class Result {
         timestamp = json['timestamp'] as int,
         predictions = (json['predictions'] as List).map((p) =>
             Prediction.fromJson(p)).toList();
+
+  Map<String, dynamic> toJson() => {
+    'uuid': uuid,
+    'timestamp': timestamp,
+    'predictions': predictions,
+  };
 }

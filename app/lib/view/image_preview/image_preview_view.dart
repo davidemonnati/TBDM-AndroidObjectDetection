@@ -152,7 +152,7 @@ class _ImagePreviewViewState extends State<ImagePreviewView> {
   void _elaborateImage() {
     setState(() => _loading = true);
     _presenter.uploadImage(_image).then((result) async {
-      ImageProvider imageProvider = await _presenter.getElaboratedImage(result);
+      File imageProvider = await _presenter.getElaboratedImage(result);
       Navigator.of(context).push(
           MaterialPageRoute(builder: (context) =>
               ResponseImageView(result: result, image: imageProvider)

@@ -1,27 +1,37 @@
+import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:app/entity/result.dart';
+import 'package:app/service/network_manager.dart';
+import 'package:app/service/network_manager_interface.dart';
 import 'package:flutter/material.dart';
 
 class ResponseImageView extends StatefulWidget {
-  const ResponseImageView({super.key, required Result result, required ImageProvider image}) :
+  const ResponseImageView({super.key, required Result result, required File image}) :
         _image = image,
         _result = result;
 
-  final ImageProvider _image;
+  final File _image;
   final Result _result;
 
   State<ResponseImageView> createState() => _ResponseImageViewState(image: _image, result: _result);
 }
 
 class _ResponseImageViewState extends State<ResponseImageView> {
-  final ImageProvider _image;
+  final File _image;
   final Result _result;
+  final INetworkManager networkManager = NetworkManager();
+  static bool _loading = false;
 
-  _ResponseImageViewState(
-      {required ImageProvider<Object> image, required Result result})
+  _ResponseImageViewState({required File image, required Result result})
       : _image = image,
         _result = result;
+
+  @override void initState() {
+    _loading = false;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +72,11 @@ class _ResponseImageViewState extends State<ResponseImageView> {
                   panEnabled: true,
                   boundaryMargin: const EdgeInsets.all(100),
                   maxScale: 3,
-                  child: Image(image: _image),
+                  child: Image(
+                      image: Image
+                          .memory(_image.readAsBytesSync())
+                          .image
+                  ),
                 ),
               ),
             ),
@@ -93,7 +107,7 @@ class _ResponseImageViewState extends State<ResponseImageView> {
                     ),
                   ],
                 )
-            )
+            ),
           ]
       ),
     );
@@ -123,7 +137,23 @@ class _ResponseImageViewState extends State<ResponseImageView> {
   }
 
   void _saveImage() {
-    // TODO: inserire logica per il salvataggio della foto a BE
+    setState(() => _loading = true);
+    var json = jsonEncode(_result.toJson());
+
+    networkManager.saveImage(_image, json).then((result) {
+      setState(() => _loading = false);
+    }).onError((e, s) {
+      setState(() => _loading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: const Text(
+                  "A connection error occurred"),
+              action: SnackBarAction(
+                label: 'Close',
+                onPressed: () {},
+              )
+          ));
+    });
   }
 
   void _deleteImage() {

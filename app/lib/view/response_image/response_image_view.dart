@@ -38,74 +38,108 @@ class _ResponseImageViewState extends State<ResponseImageView> {
     return Scaffold(
       body: Stack(
           children: [
-            Positioned(
-              top: MediaQuery
-                  .of(context)
-                  .size
-                  .width * 0.3,
-              child: RichText(
-                  text: const TextSpan(
-                      text: 'Preview',
-                      style: TextStyle(
-                        fontSize: 36,
-                        fontFamily: 'cabin',
+            Stack(
+              children: [
+                Positioned(
+                  top: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.3,
+                  child: RichText(
+                      text: const TextSpan(
+                          text: 'Preview',
+                          style: TextStyle(
+                            fontSize: 36,
+                            fontFamily: 'cabin',
+                          )
                       )
-                  )
-              ),
-            ),
-            Positioned(
-              bottom: MediaQuery
-                  .of(context)
-                  .size
-                  .width * 0.1,
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width,
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height,
-              child: Transform.rotate(
-                angle: 90 * pi / 180,
-                child: InteractiveViewer(
-                  panEnabled: true,
-                  boundaryMargin: const EdgeInsets.all(100),
-                  maxScale: 3,
-                  child: Image(
-                      image: Image
-                          .memory(_image.readAsBytesSync())
-                          .image
                   ),
                 ),
-              ),
+                Positioned(
+                  bottom: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.1,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height,
+                  child: Transform.rotate(
+                    angle: 90 * pi / 180,
+                    child: InteractiveViewer(
+                      panEnabled: true,
+                      boundaryMargin: const EdgeInsets.all(100),
+                      maxScale: 3,
+                      child: Image(
+                          image: Image
+                              .memory(_image.readAsBytesSync())
+                              .image
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                    top: MediaQuery
+                        .of(context)
+                        .size
+                        .width * 0.9,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width,
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .height,
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: _buildButtons(
+                                Colors.white, Icons.delete_outlined, 'Delete',
+                                _deleteImage)
+                        ),
+                        Expanded(
+                            child: _buildButtons(
+                                Colors.white, Icons.archive_outlined, 'Save',
+                                _saveImage)
+                        ),
+                      ],
+                    )
+                ),
+              ],
             ),
-            Positioned(
-                top: MediaQuery
-                    .of(context)
-                    .size
-                    .width * 0.9,
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height,
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: _buildButtons(
-                            Colors.white, Icons.delete_outlined, 'Delete',
-                            _deleteImage)
-                    ),
-                    Expanded(
-                        child: _buildButtons(
-                            Colors.white, Icons.archive_outlined, 'Save',
-                            _saveImage)
-                    ),
-                  ],
+            Visibility(
+                visible: _loading,
+                child: Positioned(
+                  child: Align(
+                      alignment: Alignment.center,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(
+                            height: 50,
+                            width: 50,
+                            child: CircularProgressIndicator(strokeWidth: 5),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 5),
+                            child: const Text(
+                              "Saving",
+                              style: TextStyle(
+                                fontSize: 27,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                  ),
                 )
             ),
           ]
@@ -142,12 +176,36 @@ class _ResponseImageViewState extends State<ResponseImageView> {
 
     networkManager.saveImage(_image, json).then((result) {
       setState(() => _loading = false);
+      showDialog(
+          context: context,
+          builder: (BuildContext context) =>
+              Dialog(
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      const SizedBox(height: 5),
+                      const Text('Image successfully saved'),
+                      const SizedBox(height: 15),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Close'),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+      );
     }).onError((e, s) {
       setState(() => _loading = false);
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
               content: const Text(
-                  "A connection error occurred"),
+                  "An error has occurred"),
               action: SnackBarAction(
                 label: 'Close',
                 onPressed: () {},

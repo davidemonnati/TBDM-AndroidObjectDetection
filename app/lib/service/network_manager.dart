@@ -1,15 +1,41 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:app/entity/result.dart';
 import 'package:app/service/network_manager_interface.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:app/util/constants.dart';
 import 'package:http/http.dart';
+import 'package:path_provider/path_provider.dart';
 
 class NetworkManager implements INetworkManager {
-  Future<ImageProvider> uploadImage(String uri, File image) {
+
+  @override
+  Future<Result> uploadImage(String uri, File image) {
     Future<StreamedResponse> response = _makeHttpRequest(uri, image);
-    Future<String> uuid = _getUuidFromJson(response);
-    return _getImage(uri, uuid);
+    return _getResultFromResponse(response);
+  }
+
+  @override
+  Future<File> getElaboratedImage(Result result) {
+    String uuid = result.uuid;
+    return _getImage(Constants.uri, uuid);
+  }
+
+  @override
+  Future<StreamedResponse> saveImage(File image, String json) async {
+    var request = MultipartRequest(
+        'POST', Uri.parse("${Constants.saveImageUri}app/image"));
+    request.files.add(MultipartFile.fromBytes(
+        'image',
+        File(image.path).readAsBytesSync(),
+        filename: image.path
+            .split("/")
+            .last
+    ));
+    request.fields['data'] = json;
+    return await request.send();
   }
 
   Future<StreamedResponse> _makeHttpRequest(String uri, File image) async {
@@ -20,18 +46,21 @@ class NetworkManager implements INetworkManager {
     return await request.send();
   }
 
-  Future<String> _getUuidFromJson(Future<StreamedResponse> response) async {
+  Future<Result> _getResultFromResponse(
+      Future<StreamedResponse> response) async {
     StreamedResponse resp = await response;
     String body = (await Response.fromStream(resp)).body;
-    var json = jsonDecode(body);
-    String uuid = json["predictions"]["uuid"];
-    return Future.value(uuid);
+    return Result.fromJson(jsonDecode(body)['predictions']);
   }
 
-  Future<ImageProvider> _getImage(String uri, Future<String> uuid) async {
+  Future<File> _getImage(String uri, String uuid) async {
     var response = await get(Uri.parse("${uri}get-image/${await uuid}"));
-    return Image
-        .memory(response.bodyBytes)
-        .image;
+    Uint8List uint8list = response.bodyBytes;
+    ByteBuffer buffer = uint8list.buffer;
+    ByteData byteData = ByteData.view(buffer);
+    Directory tempDir = await getTemporaryDirectory();
+    return await File('${tempDir.path}/img').writeAsBytes(
+        buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes)
+    );
   }
 }

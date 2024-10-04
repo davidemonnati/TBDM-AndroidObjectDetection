@@ -191,7 +191,7 @@ class _ResponseImageViewState extends State<ResponseImageView> {
                       const SizedBox(height: 15),
                       TextButton(
                         onPressed: () {
-                          Navigator.pop(context);
+                          Navigator.pushNamed(context, '/home');
                         },
                         child: const Text('Close'),
                       ),

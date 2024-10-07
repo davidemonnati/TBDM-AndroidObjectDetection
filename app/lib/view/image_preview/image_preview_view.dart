@@ -159,12 +159,11 @@ class _ImagePreviewViewState extends State<ImagePreviewView> {
           )
       );
       setState(() => _loading = false);
-    }).onError((e, s) {
+    }).catchError((error) {
       setState(() => _loading = false);
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content: const Text(
-                  "A connection error occurred"),
+              content: Text(error.toString()),
               action: SnackBarAction(
                 label: 'Close',
                 onPressed: () {},

@@ -1,3 +1,4 @@
+import 'package:app/util/constants.dart';
 import 'package:app/view/home/home_presenter.dart';
 import 'package:app/view/image_preview/image_preview_view.dart';
 import 'package:camera/camera.dart';
@@ -47,8 +48,8 @@ class HomeView extends State<MyHomePage> {
                 TextButton(
                     onPressed: () {},
                     child: Icon(
-                        Icons.cached,
-                        color: Colors.white,
+                        Icons.settings,
+                        color: Constants.lightIconsColor,
                         size: MediaQuery
                             .of(context)
                             .size
@@ -90,10 +91,10 @@ class HomeView extends State<MyHomePage> {
           PreferredSize(
             preferredSize: const Size.fromHeight(10),
             child: TextButton(
-              child: const Icon(
+              child: Icon(
                 Icons.radio_button_checked,
                 size: 80,
-                color: Colors.white,
+                color: Constants.lightIconsColor,
               ),
               onPressed: () async {
                 XFile image = await _presenter.takePicture(_controller);

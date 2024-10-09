@@ -1,10 +1,8 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
 import 'package:app/entity/result.dart';
-import 'package:app/service/network_manager.dart';
-import 'package:app/service/network_manager_interface.dart';
+import 'package:app/view/response_image/response_image_presenter.dart';
 import 'package:flutter/material.dart';
 
 class ResponseImageView extends StatefulWidget {
@@ -21,7 +19,9 @@ class ResponseImageView extends StatefulWidget {
 class _ResponseImageViewState extends State<ResponseImageView> {
   final File _image;
   final Result _result;
-  final INetworkManager networkManager = NetworkManager();
+
+  //final INetworkManager networkManager = NetworkManager();
+  final ResponseImagePresenter _responseImagePresenter = ResponseImagePresenter();
   static bool _loading = false;
 
   _ResponseImageViewState({required File image, required Result result})
@@ -172,33 +172,13 @@ class _ResponseImageViewState extends State<ResponseImageView> {
 
   void _saveImage() {
     setState(() => _loading = true);
-    var json = jsonEncode(_result.toJson());
 
-    networkManager.saveImage(_image, json).then((result) {
+    _responseImagePresenter.saveImage(_result, _image).then((result) {
       setState(() => _loading = false);
       showDialog(
           context: context,
           builder: (BuildContext context) =>
-              Dialog(
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      const SizedBox(height: 5),
-                      const Text('Image successfully saved'),
-                      const SizedBox(height: 15),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/home');
-                        },
-                        child: const Text('Close'),
-                      ),
-                    ],
-                  ),
-                ),
-              )
+              _showDialog()
       );
     }).onError((e, s) {
       setState(() => _loading = false);
@@ -216,5 +196,28 @@ class _ResponseImageViewState extends State<ResponseImageView> {
 
   void _deleteImage() {
     Navigator.pushNamed(context, '/home');
+  }
+
+  Widget _showDialog() {
+    return Dialog(
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const SizedBox(height: 5),
+            const Text('Image successfully saved'),
+            const SizedBox(height: 15),
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/home');
+              },
+              child: const Text('Close'),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

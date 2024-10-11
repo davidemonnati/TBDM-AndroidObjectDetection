@@ -5,6 +5,8 @@ import 'package:app/entity/result.dart';
 import 'package:app/view/response_image/response_image_presenter.dart';
 import 'package:flutter/material.dart';
 
+import '../../util/constants.dart';
+
 class ResponseImageView extends StatefulWidget {
   const ResponseImageView({super.key, required Result result, required File image}) :
         _image = image,
@@ -46,11 +48,12 @@ class _ResponseImageViewState extends State<ResponseImageView> {
                       .size
                       .width * 0.3,
                   child: RichText(
-                      text: const TextSpan(
+                      text: TextSpan(
                           text: 'Preview',
                           style: TextStyle(
                             fontSize: 36,
                             fontFamily: 'cabin',
+                            color: Constants.lightIconsColor,
                           )
                       )
                   ),
@@ -99,12 +102,14 @@ class _ResponseImageViewState extends State<ResponseImageView> {
                       children: [
                         Expanded(
                             child: _buildButtons(
-                                Colors.white, Icons.delete_outlined, 'Delete',
+                                Constants.lightIconsColor,
+                                Icons.delete_outlined, 'Delete',
                                 _deleteImage)
                         ),
                         Expanded(
                             child: _buildButtons(
-                                Colors.white, Icons.archive_outlined, 'Save',
+                                Constants.lightIconsColor,
+                                Icons.archive_outlined, 'Save',
                                 _saveImage)
                         ),
                       ],
@@ -128,12 +133,12 @@ class _ResponseImageViewState extends State<ResponseImageView> {
                           ),
                           Container(
                             margin: const EdgeInsets.only(top: 5),
-                            child: const Text(
+                            child: Text(
                               "Saving",
                               style: TextStyle(
                                 fontSize: 27,
                                 fontWeight: FontWeight.w500,
-                                color: Colors.white,
+                                color: Constants.lightIconsColor,
                               ),
                             ),
                           )

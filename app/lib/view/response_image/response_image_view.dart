@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:app/entity/result.dart';
+import 'package:app/entity/detection/result.dart';
 import 'package:app/view/response_image/response_image_presenter.dart';
 import 'package:flutter/material.dart';
 

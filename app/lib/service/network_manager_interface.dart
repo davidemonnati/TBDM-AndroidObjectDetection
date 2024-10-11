@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:app/entity/result.dart';
+import 'package:app/entity/detection/result.dart';
 import 'package:http/http.dart';
 
 abstract class INetworkManager {

@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:http/http.dart';
 
-import '../../entity/result.dart';
+import '../../entity/detection/result.dart';
 import '../../service/network_manager.dart';
 import '../../service/network_manager_interface.dart';
 

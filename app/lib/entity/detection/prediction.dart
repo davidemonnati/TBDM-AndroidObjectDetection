@@ -1,4 +1,4 @@
-import 'package:app/entity/directions.dart';
+import 'package:app/entity/detection/directions.dart';
 
 class Prediction {
   final String category;

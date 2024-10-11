@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:app/entity/result.dart';
+import 'package:app/entity/detection/result.dart';
 import 'package:app/util/constants.dart';
 import 'package:camera/camera.dart';
 
@@ -16,7 +16,6 @@ class ImagePreviewPresenter {
   }
 
   Future<File> getElaboratedImage(Result result) async {
-    String uri = Constants.uri;
     return _networkManager.getElaboratedImage(result);
   }
 }

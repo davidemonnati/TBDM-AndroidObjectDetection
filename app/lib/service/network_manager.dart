@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:app/entity/result.dart';
+import 'package:app/entity/detection/result.dart';
 import 'package:app/exception/app_error.dart';
 import 'package:app/exception/app_exception.dart';
 import 'package:app/service/network_manager_interface.dart';

@@ -46,7 +46,9 @@ class HomeView extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/settings');
+                    },
                     child: Icon(
                         Icons.settings,
                         color: Constants.lightIconsColor,

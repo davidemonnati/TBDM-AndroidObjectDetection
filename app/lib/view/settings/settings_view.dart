@@ -13,7 +13,7 @@ class SettingsView extends StatefulWidget {
 class _SettingsView extends State<SettingsView> {
   final detectionServerController = TextEditingController();
   final storageServerController = TextEditingController();
-  late SettingsDatabase database = SettingsDatabase();
+  static SettingsDatabase database = SettingsDatabase();
   static String detectionLabel = "Detection Server address";
   static String storageLabel = "Storage Server address";
 
@@ -22,6 +22,11 @@ class _SettingsView extends State<SettingsView> {
     detectionServerController.dispose();
     storageServerController.dispose();
     super.dispose();
+  }
+
+  @override void initState() {
+    _initLabels();
+    super.initState();
   }
 
   @override

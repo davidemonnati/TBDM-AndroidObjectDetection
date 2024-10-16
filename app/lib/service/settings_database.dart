@@ -3,23 +3,15 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class SettingsDatabase {
-  static final SettingsDatabase instance = SettingsDatabase._internal();
 
   static Database? _database;
 
-  SettingsDatabase._internal();
-
-  Future<Database?> get database async {
-    if (_database != null) {
-      return _database;
-    }
-
-    _database = await _setupDb();
-    return _database;
+  SettingsDatabase() {
+    _setupDb();
   }
 
-  Future<Database> _setupDb() async {
-    return openDatabase(
+  void _setupDb() async {
+    _database = await openDatabase(
         join(await getDatabasesPath(), 'settings.db'),
         version: 1,
         onCreate: (db, version) {
@@ -30,20 +22,28 @@ class SettingsDatabase {
     );
   }
 
-  Database? getDatabase() {
-    return _database;
-  }
-
-
   void saveSettings(Settings settings) async {
-    _database?.insert(
-      'services',
+    _database!.insert(
+      'SERVICES',
       settings.toMap(),
     );
   }
 
-  void readSettings() async {
-    final List<Map<String, Object?>>? settingsMap = await _database?.query(
-        'services');
+  Future<List<Settings>> readSettings() async {
+    final List<Map<String, Object?>> settingsMap = await _database!.query(
+        'SERVICES');
+
+    return [
+      for (final {
+      'DETECTION_IP': detectionIp as String,
+      'STORAGE_IP': storageIp as String,
+      } in settingsMap)
+        Settings(detectionIp: detectionIp, storageIp: storageIp),
+    ];
+  }
+
+  Future<Settings> getLastAddress() async {
+    List<Settings> settings = await readSettings();
+    return settings.last;
   }
 }

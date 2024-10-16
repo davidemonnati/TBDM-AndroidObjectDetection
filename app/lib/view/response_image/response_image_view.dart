@@ -22,7 +22,6 @@ class _ResponseImageViewState extends State<ResponseImageView> {
   final File _image;
   final Result _result;
 
-  //final INetworkManager networkManager = NetworkManager();
   final ResponseImagePresenter _responseImagePresenter = ResponseImagePresenter();
   static bool _loading = false;
 
@@ -40,6 +39,29 @@ class _ResponseImageViewState extends State<ResponseImageView> {
     return Scaffold(
       body: Stack(
           children: [
+            Container(
+              padding: MediaQuery
+                  .of(context)
+                  .padding * 1.2,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/settings');
+                    },
+                    child: Icon(
+                        Icons.settings,
+                        color: Constants.lightIconsColor,
+                        size: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 0.07
+                    )
+                ),
+              ],
+            ),
             Stack(
               children: [
                 Positioned(

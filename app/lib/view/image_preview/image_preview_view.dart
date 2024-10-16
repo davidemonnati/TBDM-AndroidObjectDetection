@@ -41,7 +41,9 @@ class _ImagePreviewViewState extends State<ImagePreviewView> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/settings');
+                          },
                           child: Icon(
                               Icons.settings,
                               color: Constants.lightIconsColor,

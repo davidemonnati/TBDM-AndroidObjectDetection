@@ -1,11 +1,11 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:app/entity/result.dart';
-import 'package:app/service/network_manager.dart';
-import 'package:app/service/network_manager_interface.dart';
+import 'package:app/entity/detection/result.dart';
+import 'package:app/view/response_image/response_image_presenter.dart';
 import 'package:flutter/material.dart';
+
+import '../../util/constants.dart';
 
 class ResponseImageView extends StatefulWidget {
   const ResponseImageView({super.key, required Result result, required File image}) :
@@ -21,7 +21,8 @@ class ResponseImageView extends StatefulWidget {
 class _ResponseImageViewState extends State<ResponseImageView> {
   final File _image;
   final Result _result;
-  final INetworkManager networkManager = NetworkManager();
+
+  final ResponseImagePresenter _responseImagePresenter = ResponseImagePresenter();
   static bool _loading = false;
 
   _ResponseImageViewState({required File image, required Result result})
@@ -38,6 +39,29 @@ class _ResponseImageViewState extends State<ResponseImageView> {
     return Scaffold(
       body: Stack(
           children: [
+            Container(
+              padding: MediaQuery
+                  .of(context)
+                  .padding * 1.2,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/settings');
+                    },
+                    child: Icon(
+                        Icons.settings,
+                        color: Constants.lightIconsColor,
+                        size: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 0.07
+                    )
+                ),
+              ],
+            ),
             Stack(
               children: [
                 Positioned(
@@ -46,11 +70,12 @@ class _ResponseImageViewState extends State<ResponseImageView> {
                       .size
                       .width * 0.3,
                   child: RichText(
-                      text: const TextSpan(
+                      text: TextSpan(
                           text: 'Preview',
                           style: TextStyle(
                             fontSize: 36,
                             fontFamily: 'cabin',
+                            color: Constants.lightIconsColor,
                           )
                       )
                   ),
@@ -99,12 +124,14 @@ class _ResponseImageViewState extends State<ResponseImageView> {
                       children: [
                         Expanded(
                             child: _buildButtons(
-                                Colors.white, Icons.delete_outlined, 'Delete',
+                                Constants.lightIconsColor,
+                                Icons.delete_outlined, 'Delete',
                                 _deleteImage)
                         ),
                         Expanded(
                             child: _buildButtons(
-                                Colors.white, Icons.archive_outlined, 'Save',
+                                Constants.lightIconsColor,
+                                Icons.archive_outlined, 'Save',
                                 _saveImage)
                         ),
                       ],
@@ -128,12 +155,12 @@ class _ResponseImageViewState extends State<ResponseImageView> {
                           ),
                           Container(
                             margin: const EdgeInsets.only(top: 5),
-                            child: const Text(
+                            child: Text(
                               "Saving",
                               style: TextStyle(
                                 fontSize: 27,
                                 fontWeight: FontWeight.w500,
-                                color: Colors.white,
+                                color: Constants.lightIconsColor,
                               ),
                             ),
                           )
@@ -172,33 +199,13 @@ class _ResponseImageViewState extends State<ResponseImageView> {
 
   void _saveImage() {
     setState(() => _loading = true);
-    var json = jsonEncode(_result.toJson());
 
-    networkManager.saveImage(_image, json).then((result) {
+    _responseImagePresenter.saveImage(_result, _image).then((result) {
       setState(() => _loading = false);
       showDialog(
           context: context,
           builder: (BuildContext context) =>
-              Dialog(
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      const SizedBox(height: 5),
-                      const Text('Image successfully saved'),
-                      const SizedBox(height: 15),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/home');
-                        },
-                        child: const Text('Close'),
-                      ),
-                    ],
-                  ),
-                ),
-              )
+              _showDialog()
       );
     }).onError((e, s) {
       setState(() => _loading = false);
@@ -216,5 +223,28 @@ class _ResponseImageViewState extends State<ResponseImageView> {
 
   void _deleteImage() {
     Navigator.pushNamed(context, '/home');
+  }
+
+  Widget _showDialog() {
+    return Dialog(
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const SizedBox(height: 5),
+            const Text('Image successfully saved'),
+            const SizedBox(height: 15),
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/home');
+              },
+              child: const Text('Close'),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

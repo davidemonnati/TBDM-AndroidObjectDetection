@@ -1,4 +1,4 @@
-import 'package:app/entity/prediction.dart';
+import 'package:app/entity/detection/prediction.dart';
 
 class Result {
   final String uuid;

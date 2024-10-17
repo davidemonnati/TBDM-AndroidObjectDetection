@@ -4,6 +4,8 @@ import 'package:app/view/response_image/response_image_view.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
+import '../../util/constants.dart';
+
 class ImagePreviewView extends StatefulWidget {
   const ImagePreviewView({super.key, required XFile image}) : _image = image;
   final XFile _image;
@@ -30,20 +32,28 @@ class _ImagePreviewViewState extends State<ImagePreviewView> {
           children: [
             Stack(
                 children: [
-                  Positioned(
-                      top: MediaQuery
-                          .of(context)
-                          .size
-                          .width * 0.2,
-                      child: RichText(
-                          text: const TextSpan(
-                              text: 'New image',
-                              style: TextStyle(
-                                fontSize: 36,
-                                fontFamily: 'cabin',
-                              )
+                  Container(
+                    padding: MediaQuery
+                        .of(context)
+                        .padding * 1.2,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/settings');
+                          },
+                          child: Icon(
+                              Icons.settings,
+                              color: Constants.lightIconsColor,
+                              size: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width * 0.07
                           )
-                      )
+                      ),
+                    ],
                   ),
                   Positioned(
                     height: MediaQuery
@@ -54,10 +64,11 @@ class _ImagePreviewViewState extends State<ImagePreviewView> {
                         .of(context)
                         .size
                         .width,
-                    child: FractionallySizedBox(
-                      widthFactor: 1,
-                      heightFactor: 0.7,
-                      child: Image.file(File(_image.path)),
+                    child: InteractiveViewer(
+                        panEnabled: true,
+                        boundaryMargin: const EdgeInsets.all(100),
+                        maxScale: 3,
+                        child: Image.file(File(_image.path))
                     ),
                   ),
                   Positioned(
@@ -77,12 +88,14 @@ class _ImagePreviewViewState extends State<ImagePreviewView> {
                         children: [
                           Expanded(
                             child: _buildButtons(
-                                Colors.white, Icons.delete_outline, 'Cancel',
+                                Constants.lightIconsColor, Icons.delete_outline,
+                                'Cancel',
                                 _deleteImage),
                           ),
                           Expanded(
                               child: _buildButtons(
-                                  Colors.white, Icons.send_outlined,
+                                  Constants.lightIconsColor,
+                                  Icons.send_outlined,
                                   'Elaborate',
                                   _elaborateImage)
                           ),
@@ -107,12 +120,12 @@ class _ImagePreviewViewState extends State<ImagePreviewView> {
                           ),
                           Container(
                             margin: const EdgeInsets.only(top: 5),
-                            child: const Text(
+                            child: Text(
                               "Processing",
                               style: TextStyle(
                                 fontSize: 27,
                                 fontWeight: FontWeight.w500,
-                                color: Colors.white,
+                                color: Constants.lightIconsColor,
                               ),
                             ),
                           )

@@ -212,7 +212,7 @@ class _ResponseImageViewState extends State<ResponseImageView> {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
               content: const Text(
-                  "An error has occurred"),
+                  "An error occurred while saving the image"),
               action: SnackBarAction(
                 label: 'Close',
                 onPressed: () {},

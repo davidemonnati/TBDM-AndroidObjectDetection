@@ -107,6 +107,7 @@ class _SettingsView extends State<SettingsView> {
       Settings settings = Settings(
           detectionIp: detectionIp, storageIp: storageIp);
       database.saveSettings(settings);
+      _goBack();
     } else {
       showDialog(
           context: context,

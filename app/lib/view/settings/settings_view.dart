@@ -11,16 +11,16 @@ class SettingsView extends StatefulWidget {
 }
 
 class _SettingsView extends State<SettingsView> {
-  final detectionServerController = TextEditingController();
-  final storageServerController = TextEditingController();
-  static SettingsDatabase database = SettingsDatabase();
-  static String detectionLabel = "Detection Server address";
-  static String storageLabel = "Storage Server address";
+  final _detectionServerController = TextEditingController();
+  final _storageServerController = TextEditingController();
+  static final SettingsDatabase _database = SettingsDatabase();
+  static String _detectionLabel = "Detection Server address";
+  static String _storageLabel = "Storage Server address";
 
   @override
   void dispose() {
-    detectionServerController.dispose();
-    storageServerController.dispose();
+    _detectionServerController.dispose();
+    _storageServerController.dispose();
     super.dispose();
   }
 
@@ -65,22 +65,22 @@ class _SettingsView extends State<SettingsView> {
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: TextField(
-                  controller: detectionServerController,
+                  controller: _detectionServerController,
                   obscureText: false,
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
-                    labelText: detectionLabel,
+                    labelText: _detectionLabel,
                   ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: TextField(
-                  controller: storageServerController,
+                  controller: _storageServerController,
                   obscureText: false,
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
-                    labelText: storageLabel,
+                    labelText: _storageLabel,
                   ),
                 ),
               ),
@@ -97,8 +97,8 @@ class _SettingsView extends State<SettingsView> {
   }
 
   void _applySettings() async {
-    String detectionIp = detectionServerController.text;
-    String storageIp = storageServerController.text;
+    String detectionIp = _detectionServerController.text;
+    String storageIp = _storageServerController.text;
     if (Uri
         .parse(detectionIp)
         .isAbsolute && Uri
@@ -106,7 +106,7 @@ class _SettingsView extends State<SettingsView> {
         .isAbsolute) {
       Settings settings = Settings(
           detectionIp: detectionIp, storageIp: storageIp);
-      database.saveSettings(settings);
+      _database.saveSettings(settings);
       _goBack();
     } else {
       showDialog(
@@ -117,12 +117,12 @@ class _SettingsView extends State<SettingsView> {
   }
 
   void _initLabels() async {
-    List<Settings> lista = await database.readSettings();
+    List<Settings> lista = await _database.readSettings();
     Settings last = lista.last;
 
     setState(() {
-      detectionLabel = last.detectionIp;
-      storageLabel = last.storageIp;
+      _detectionLabel = last.detectionIp;
+      _storageLabel = last.storageIp;
     });
   }
 

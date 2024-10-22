@@ -65,7 +65,7 @@ class _ImagePreviewViewState extends State<ImagePreviewView> {
                         .size
                         .width,
                     child: InteractiveViewer(
-                        panEnabled: true,
+                        panEnabled: false,
                         boundaryMargin: const EdgeInsets.all(100),
                         maxScale: 3,
                         child: Image.file(File(_image.path))

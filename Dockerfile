@@ -1,4 +1,4 @@
-FROM python
+FROM python:3.9.20-bookworm
 
 EXPOSE 8000
 

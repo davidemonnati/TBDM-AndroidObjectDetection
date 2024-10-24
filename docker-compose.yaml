@@ -1,6 +1,7 @@
 services:
 
   mongo:
+    container_name: tbdm-mongo-db
     image: mongo
     restart: always
     ports:
@@ -9,6 +10,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: tbdm
       MONGO_INITDB_ROOT_PASSWORD: tbdm
   python:
+    container_name: be-objdetection
     build: .
     ports:
       - 8000:8000

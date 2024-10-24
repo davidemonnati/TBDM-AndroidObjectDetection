@@ -1,0 +1,14 @@
+services:
+
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: tbdm
+      MONGO_INITDB_ROOT_PASSWORD: tbdm
+  python:
+    build: .
+    ports:
+      - 8000:8000

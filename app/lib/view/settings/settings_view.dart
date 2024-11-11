@@ -1,6 +1,6 @@
 import 'package:app/entity/settings.dart';
-import 'package:app/service/settings_database.dart';
 import 'package:app/util/constants.dart';
+import 'package:app/view/settings/settings_presenter.dart';
 import 'package:flutter/material.dart';
 
 class SettingsView extends StatefulWidget {
@@ -13,7 +13,7 @@ class SettingsView extends StatefulWidget {
 class _SettingsView extends State<SettingsView> {
   final _detectionServerController = TextEditingController();
   final _storageServerController = TextEditingController();
-  static final SettingsDatabase _database = SettingsDatabase();
+  final _settingsPresenter = SettingsPresenter();
   static String _detectionLabel = "Detection Server address";
   static String _storageLabel = "Storage Server address";
 
@@ -106,7 +106,7 @@ class _SettingsView extends State<SettingsView> {
         .isAbsolute) {
       Settings settings = Settings(
           detectionIp: detectionIp, storageIp: storageIp);
-      _database.saveSettings(settings);
+      _settingsPresenter.saveSettings(settings);
       _goBack();
     } else {
       showDialog(
@@ -117,7 +117,7 @@ class _SettingsView extends State<SettingsView> {
   }
 
   void _initLabels() async {
-    List<Settings> lista = await _database.readSettings();
+    List<Settings> lista = await _settingsPresenter.readSettings();
     Settings last = lista.last;
 
     setState(() {
